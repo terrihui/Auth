@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>花子先生網校</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { 
+      font-family:"PingFang HK","Microsoft JhengHei",sans-serif; 
+      background:#f7f1e3; 
+      min-height:100vh; 
+      padding:20px; 
+      display:flex; 
+      justify-content:center; 
+      align-items:center;
+    }
+    .box { 
+      background:white; 
+      width:100%; 
+      max-width:400px; 
+      padding:30px; 
+      border-radius:10px; 
+      box-shadow:0 5px 15px rgba(0,0,0,0.1);
+    }
+    h1 { text-align:center; margin-bottom:20px; color:#333; }
+    input { 
+      width:100%; 
+      padding:12px; 
+      margin:10px 0; 
+      border:1px solid #ddd; 
+      border-radius:5px; 
+      font-size:16px;
+    }
+    button { 
+      width:100%; 
+      padding:12px; 
+      background:#333; 
+      color:white; 
+      border:none; 
+      border-radius:5px; 
+      font-size:16px; 
+      cursor:pointer;
+    }
+    button:hover { background:#555; }
+    #notice { 
+      margin:15px 0; 
+      padding:10px; 
+      background:#fff8e1; 
+      border:1px solid #ffe082; 
+      border-radius:5px;
+    }
+    #classroom-btn { 
+      display:block; 
+      margin-top:20px; 
+      padding:12px; 
+      background:#4285F4; 
+      color:white; 
+      text-align:center; 
+      text-decoration:none; 
+      border-radius:5px;
+    }
+    #classroom-btn:hover { background:#357ae8; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1>花子先生網校</h1>
+    
+    <!-- 登入區域 -->
+    <div id="login">
+      <input type="email" id="email" placeholder="你的電郵">
+      <input type="password" id="password" placeholder="密碼（至少6位）">
+      <button onclick="login()">登入</button>
+      <button onclick="register()">註冊新帳號</button>
+    </div>
+
+    <!-- 登入後顯示的內容 -->
+    <div id="dashboard" style="display:none;">
+      <div id="notice">
+        📢 提醒：明天19:00有數學課，記得準時參加！
+      </div>
+      <a id="classroom-btn" href="https://classroom.google.com/c/Nzk2NzkyNDEyNDkx?cjc=dwgpxthq" target="_blank">
+        進入你的課堂
+      </a>
+      <button onclick="logout()" style="margin-top:10px;">登出</button>
+    </div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    // 導入Firebase工具
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
+
+    // 你的新Firebase配置
+    const firebaseConfig = {
+      apiKey: "AIzaSyB58QT_SabVrd4R9FVgwsnkwNlgZwWHChQ",
+      authDomain: "auth-53ab7.firebaseapp.com",
+      projectId: "auth-53ab7",
+      storageBucket: "auth-53ab7.firebasestorage.app",
+      messagingSenderId: "277804563457",
+      appId: "1:277804563457:web:57123fb83eb8bac3155400"
+    };
+
+    // 初始化Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // 監聽登入狀態
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        document.getElementById('login').style.display = 'none';
+        document.getElementById('dashboard').style.display = 'block';
+      } else {
+        document.getElementById('login').style.display = 'block';
+        document.getElementById('dashboard').style.display = 'none';
+      }
+    });
+
+    // 登入功能
+    window.login = function() {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      if (!email || !password) {
+        alert('請填寫電郵和密碼！');
+        return;
+      }
+      signInWithEmailAndPassword(auth, email, password)
+        .then(() => alert('登入成功！'))
+        .catch((error) => {
+          alert('登入失敗：' + error.message);
+        });
+    };
+
+    // 註冊功能
+    window.register = function() {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      if (!email || password.length < 6) {
+        alert('請填寫有效電郵，密碼至少6位！');
+        return;
+      }
+      createUserWithEmailAndPassword(auth, email, password)
+        .then(() => alert('註冊成功！現在可以登入了~'))
+        .catch((error) => {
+          alert('註冊失敗：' + error.message);
+        });
+    };
+
+    // 登出功能
+    window.logout = function() {
+      signOut(auth).then(() => alert('已登出！'));
+    };
+  </script>
+</body>
+</html>
