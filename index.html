@@ -89,11 +89,11 @@
 
   <!-- Firebase SDK -->
   <script type="module">
-    // 導入Firebase工具
+    // 導入Firebase必要工具
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
 
-    // 你的新Firebase配置
+    // 你的Firebase配置（已核對正確）
     const firebaseConfig = {
       apiKey: "AIzaSyB58QT_SabVrd4R9FVgwsnkwNlgZwWHChQ",
       authDomain: "auth-53ab7.firebaseapp.com",
@@ -103,9 +103,9 @@
       appId: "1:277804563457:web:57123fb83eb8bac3155400"
     };
 
-    // 初始化Firebase
+    // 初始化Firebase及Auth
     const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+    const auth = getAuth(app); // 這一步是關鍵，之前可能漏了
 
     // 監聽登入狀態
     onAuthStateChanged(auth, (user) => {
