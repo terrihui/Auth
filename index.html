@@ -8,7 +8,8 @@
     * { margin:0; padding:0; box-sizing:border-box; }
     body { 
       font-family:"PingFang HK","Microsoft JhengHei",sans-serif; 
-      background:#f7f1e3; 
+      /* 背景改為 D48A3F 的漸變色 */
+      background: linear-gradient(135deg, #D48A3F 0%, #E9B47E 100%); 
       min-height:100vh; 
       padding:20px; 
       display:flex; 
@@ -16,41 +17,44 @@
       align-items:center;
     }
     .box { 
-      background:white; 
+      /* 框框內轉成順眼的粉藍色 */
+      background: #E3F2FD; 
       width:100%; 
       max-width:400px; 
       padding:30px; 
-      border-radius:10px; 
-      box-shadow:0 5px 15px rgba(0,0,0,0.1);
+      border-radius:15px; 
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
     }
-    h1 { text-align:center; margin-bottom:20px; color:#333; }
+    h1 { text-align:center; margin-bottom:20px; color:#2c3e50; }
     input { 
       width:100%; 
       padding:12px; 
       margin:10px 0; 
-      border:1px solid #ddd; 
-      border-radius:5px; 
+      border:1px solid #bbdefb; 
+      border-radius:8px; 
       font-size:16px;
+      background: white;
     }
     button { 
       width:100%; 
       padding:12px; 
-      background:#333; 
+      background:#34495e; 
       color:white; 
       border:none; 
-      border-radius:5px; 
+      border-radius:8px; 
       font-size:16px; 
       cursor:pointer;
       margin:8px 0;
+      transition: 0.3s;
     }
-    button:hover { background:#555; }
-    button.danger { background:#d32f2f; }
-    button.danger:hover { background:#b71c1c; }
+    button:hover { background:#2c3e50; opacity: 0.9; }
+    button.danger { background:#e53935; }
+    button.danger:hover { background:#c62828; }
 
     .forgot-link {
       display:block;
       text-align:center;
-      color:#4285F4;
+      color:#1976D2;
       margin:10px 0;
       text-decoration:none;
       font-size:14px;
@@ -59,10 +63,12 @@
 
     #notice { 
       margin:15px 0; 
-      padding:10px; 
-      background:#fff8e1; 
-      border:1px solid #ffe082; 
-      border-radius:5px;
+      padding:12px; 
+      background:#ffffff; 
+      border-left: 5px solid #4285F4;
+      border-radius:4px;
+      font-size: 14px;
+      color: #555;
     }
     #classroom-btn { 
       display:block; 
@@ -72,7 +78,8 @@
       color:white; 
       text-align:center; 
       text-decoration:none; 
-      border-radius:5px;
+      border-radius:8px;
+      font-weight: bold;
     }
   </style>
 </head>
@@ -80,21 +87,18 @@
   <div class="box">
     <h1>花子先生網校</h1>
     
-    <!-- 登入區域 -->
     <div id="login">
       <input type="email" id="email" placeholder="你的電郵">
       <input type="password" id="password" placeholder="密碼（至少6位）">
       <button onclick="login()">登入</button>
       <a href="#" onclick="forgotPassword(); return false;" class="forgot-link">忘記密碼？</a>
-      <button onclick="register()" style="background:#666;">註冊新帳號</button>
+      <button onclick="register()" style="background:#78909c;">註冊新帳號</button>
     </div>
 
-    <!-- 登入後顯示的內容 -->
     <div id="dashboard" style="display:none;">
-      <p style="text-align:center; margin-bottom:15px; color:#555;" id="welcome"></p>
-      
+      <p style="text-align:center; margin-bottom:15px; color:#2c3e50; font-weight:bold;" id="welcome"></p>
       <div id="notice">
-        📢 提醒：明天19:00有數學課，記得準時參加！
+        📢 提醒：明天 19:00 有數學課，請準時參加！
       </div>
       <a id="classroom-btn" href="https://classroom.google.com/c/Nzk2NzkyNDEyNDkx?cjc=dwgpxthq" target="_blank">
         進入你的課堂
@@ -104,7 +108,6 @@
     </div>
   </div>
 
-  <!-- Firebase SDK -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
     import { 
@@ -114,7 +117,7 @@
       signOut, 
       onAuthStateChanged,
       sendPasswordResetEmail,
-      deleteUser   // 新增
+      deleteUser   
     } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
 
     const firebaseConfig = {
@@ -133,7 +136,7 @@
       if (user) {
         document.getElementById('login').style.display = 'none';
         document.getElementById('dashboard').style.display = 'block';
-        document.getElementById('welcome').textContent = `歡迎，${user.email}`;
+        document.getElementById('welcome').textContent = `歡迎回來，${user.email.split('@')[0]}`;
       } else {
         document.getElementById('login').style.display = 'block';
         document.getElementById('dashboard').style.display = 'none';
@@ -144,9 +147,7 @@
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
       if (!email || !password) return alert('請填寫電郵和密碼！');
-      
       signInWithEmailAndPassword(auth, email, password)
-        .then(() => alert('登入成功！'))
         .catch((error) => alert('登入失敗：' + error.message));
     };
 
@@ -154,42 +155,34 @@
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
       if (!email || password.length < 6) return alert('請填寫有效電郵，密碼至少6位！');
-      
       createUserWithEmailAndPassword(auth, email, password)
-        .then(() => alert('註冊成功！現在可以登入了~'))
+        .then(() => alert('註冊成功！'))
         .catch((error) => alert('註冊失敗：' + error.message));
     };
 
     window.forgotPassword = function() {
       const email = document.getElementById('email').value;
       if (!email) return alert('請先輸入你的電郵地址');
-
       sendPasswordResetEmail(auth, email)
-        .then(() => alert('✅ 重設密碼電郵已發送！\n請檢查你的郵箱（包括垃圾郵件）'))
+        .then(() => alert('✅ 重設電郵已發送！'))
         .catch((error) => alert('發送失敗：' + error.message));
     };
 
     window.logout = function() {
-      signOut(auth).then(() => alert('已登出！'));
+      signOut(auth);
     };
 
-    // ==================== 取消帳戶（永久刪除） ====================
     window.deleteAccount = function() {
-      if (!confirm('⚠️ 確定要永久刪除你的帳戶嗎？\n\n呢個動作冇得反悔，所有資料都會消失！')) {
-        return;
-      }
-
+      if (!confirm('⚠️ 確定要永久刪除帳戶嗎？此動作無法復原。')) return;
       const user = auth.currentUser;
       if (user) {
-        user.delete()
-          .then(() => {
-            alert('✅ 帳戶已成功永久刪除。');
-          })
+        deleteUser(user)
+          .then(() => alert('帳戶已刪除。'))
           .catch((error) => {
             if (error.code === 'auth/requires-recent-login') {
-              alert('基於安全原因，請先登出，再重新登入，之後再刪除帳戶。');
+              alert('為了安全，請重新登入後再進行刪除操作。');
             } else {
-              alert('刪除失敗：' + error.message);
+              alert('失敗：' + error.message);
             }
           });
       }
