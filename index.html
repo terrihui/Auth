@@ -3,83 +3,160 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>花子先生網校</title>
+  <title>花子先生網校 - 線上教室登入</title>
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
     body {
-      font-family:"PingFang HK","Noto Sans TC","Microsoft JhengHei",sans-serif;
-      background: linear-gradient(135deg, #D48A3F 0%, #E7B07A 100%);
+      font-family:"PingFang HK","Noto Sans TC","微軟正黑體",sans-serif;
+      background: linear-gradient(180deg, #FFA84A 0%, #FFD18A 100%);
       min-height:100vh;
       padding:24px;
       display:flex;
       justify-content:center;
       align-items:center;
       color:#4F3B2D;
+      position:relative;
+      overflow:hidden;
     }
-    .container { width:100%; max-width:430px; }
-    h1 {
+    /* 背景裝飾圖案 */
+    body::before, body::after,
+    .bg-icon {
+      position:absolute;
+      color:rgba(255,255,255,0.15);
+      pointer-events:none;
+    }
+    .bg-icon.book-open { top:15%; left:10%; font-size:80px; }
+    .bg-icon.grad-cap { top:12%; right:8%; font-size:90px; }
+    .bg-icon.pencil { bottom:25%; left:8%; font-size:100px; }
+    .bg-icon.book-stack { bottom:10%; right:10%; font-size:110px; }
+    .bg-icon.leaf { bottom:15%; right:5%; font-size:70px; }
+    .bg-icon.dots { bottom:15%; left:8%; font-size:40px; }
+
+    .container { width:100%; max-width:430px; z-index:1; }
+    .login-card {
+      background:#FFF9F0;
+      padding:40px 32px 32px;
+      border-radius:20px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.1);
       text-align:center;
-      margin-bottom:24px;
-      color:#B85C38;
-      font-size:42px;
+    }
+    h1 {
+      color:#1A304E;
+      font-size:48px;
       font-weight:700;
+      margin-bottom:24px;
+      position:relative;
     }
-    .box {
-      background:#F7F3EE;
-      padding:32px 28px 24px;
-      border-radius:28px;
-      box-shadow:0 18px 45px rgba(87,55,28,0.16);
+    h1::after {
+      content:"";
+      width:80px;
+      height:1px;
+      background:#D48A3F;
+      position:absolute;
+      bottom:-12px;
+      left:50%;
+      transform:translateX(-50%);
     }
-    input, button {
-      width:100%;
-      font-size:16px;
-      border-radius:16px;
+    h1::before {
+      content:"";
+      width:6px;
+      height:6px;
+      background:#D48A3F;
+      border-radius:50%;
+      position:absolute;
+      bottom:-14px;
+      left:50%;
+      transform:translateX(-50%);
+    }
+    .input-group {
+      margin:16px 0;
+      position:relative;
     }
     input {
-      padding:16px 18px;
-      margin-bottom:14px;
-      border:1px solid #E7D8CA;
-      background:#FFFDFC;
+      width:100%;
+      padding:16px 16px 16px 48px;
+      border:1px solid #D8D8D8;
+      border-radius:10px;
+      font-size:16px;
+      background:#fff;
+      color:#4F3B2D;
     }
-    button {
-      padding:15px 18px;
-      border:none;
-      color:#fff;
-      font-weight:600;
-      background:#3E5368;
-      margin-bottom:12px;
-      cursor:pointer;
+    .input-group .icon {
+      position:absolute;
+      left:16px;
+      top:50%;
+      transform:translateY(-50%);
+      color:#999;
+      font-size:18px;
+    }
+    .input-group .eye-icon {
+      right:16px;
+      left:auto;
     }
     .forgot-link {
       display:block;
       text-align:center;
-      color:#2C7BC0;
-      margin:6px 0 12px;
-      text-decoration:none;
+      color:#2C5F9E;
+      margin:12px 0 24px;
+      text-decoration:underline;
+      font-size:15px;
     }
-    .btn-secondary { background:#90A1A6; }
+    button {
+      width:100%;
+      padding:16px;
+      border:none;
+      border-radius:10px;
+      font-size:18px;
+      font-weight:600;
+      cursor:pointer;
+      transition:opacity 0.2s;
+    }
+    .btn-login {
+      background:#2A4B7C;
+      color:#fff;
+      margin-bottom:12px;
+    }
+    .btn-register {
+      background:#DCE4F0;
+      color:#2A4B7C;
+    }
+    button:hover { opacity:0.9; }
     .footer-text {
       text-align:center;
-      margin-top:18px;
+      margin-top:32px;
       font-size:14px;
-      color:rgba(255,255,255,0.92);
+      color:#4F3B2D;
       line-height:1.75;
     }
   </style>
 </head>
 <body>
+  <!-- 背景裝飾圖案 -->
+  <div class="bg-icon book-open">📖</div>
+  <div class="bg-icon grad-cap">🎓</div>
+  <div class="bg-icon pencil">✏️</div>
+  <div class="bg-icon book-stack">📚</div>
+  <div class="bg-icon leaf">🌿</div>
+  <div class="bg-icon dots">●●●<br>●●●<br>●●●</div>
+
   <div class="container">
-    <h1>線上教室</h1>
-    <div class="box">
-      <input type="email" placeholder="你的電郵">
-      <input type="password" placeholder="密碼（至少6位）">
-      <button>登入</button>
+    <div class="login-card">
+      <h1>線上教室</h1>
+      <div class="input-group">
+        <span class="icon">✉️</span>
+        <input type="email" placeholder="你的電郵">
+      </div>
+      <div class="input-group">
+        <span class="icon">🔒</span>
+        <input type="password" placeholder="密碼（至少6位）">
+        <span class="icon eye-icon">👁️</span>
+      </div>
       <a href="#" class="forgot-link">忘記密碼？</a>
-      <button class="btn-secondary">註冊新帳號</button>
+      <button class="btn-login">登入</button>
+      <button class="btn-register">註冊新帳號</button>
     </div>
     <div class="footer-text">
-      只向本善教育 及 A元智研學生使用<br>
-      花子先生管理
+      只向本善教育 及 A元智研學生使用 花子先生管理
     </div>
   </div>
 </body>
