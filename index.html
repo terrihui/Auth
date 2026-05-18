@@ -18,22 +18,23 @@
       position:relative;
       overflow:hidden;
     }
-    /* 背景裝飾圖案 - 調整：縮細、分散、透明度更高 */
+    /* 改用 SVG 線條圖，用 opacity 控制透明度 */
     .bg-icon {
       position:absolute;
-      color:rgba(255,255,255,0.015); /* 透明度調高 */
       pointer-events:none;
-      font-size:80px; /* 全部縮細 */
+      opacity:0.08; /* 呢個數值直接控制淡度，比 rgba 更有效 */
+      filter: drop-shadow(0 0 0 #fff); /* 強制將圖變白色 */
     }
-    /* 重新分布位置，分散在四周 */
-    .bg-icon.book-open { top:2%; left:4%; }
-    .bg-icon.grad-cap { top:4%; right:5%; }
-    .bg-icon.pencil { bottom:30%; left:5%; }
-    .bg-icon.book-stack { bottom:3%; right:8%; }
-    .bg-icon.leaf { bottom:1%; right:5%; }
-    .bg-icon.dots { bottom:1%; left:10%; font-size:24px; }
-    .bg-icon.dots2 { top:4%; right:15%; font-size:24px; } /* 加多個點點分散 */
-    .bg-icon.star { top:2%; right:20%; font-size:30px; } /* 加埋星星，同圖一樣 */
+    .bg-icon svg { width:60px; height:60px; fill:none; stroke:#fff; stroke-width:1.5; }
+
+    /* 分布位置，同你張圖一樣 */
+    .bg-icon.book-open { top:8%; left:5%; }
+    .bg-icon.grad-cap { top:5%; right:8%; }
+    .bg-icon.pencil { bottom:25%; left:3%; }
+    .bg-icon.book-stack { bottom:5%; right:5%; }
+    .bg-icon.leaf { bottom:10%; right:3%; }
+    .bg-icon.dots { bottom:15%; left:8%; font-size:20px; color:#fff; opacity:0.08; }
+    .bg-icon.star { top:15%; right:15%; font-size:25px; color:#fff; opacity:0.08; }
 
     .container { width:100%; max-width:430px; z-index:1; }
     .login-card {
@@ -134,14 +135,36 @@
   </style>
 </head>
 <body>
-  <!-- 背景裝飾圖案 - 分散、縮細、加埋星星 -->
-  <div class="bg-icon book-open">📖</div>
-  <div class="bg-icon grad-cap">🎓</div>
-  <div class="bg-icon pencil">✏️</div>
-  <div class="bg-icon book-stack">📚</div>
-  <div class="bg-icon leaf">🌿</div>
+  <!-- 改用 SVG 線條圖，淡度由 opacity 控制 -->
+  <div class="bg-icon book-open">
+    <svg viewBox="0 0 24 24">
+      <path d="M12 2v20M4 4h16v16H4z"/>
+      <path d="M4 4c4 0 8 2 8 2s4-2 8-2M4 20c4 0 8-2 8-2s4 2 8 2"/>
+    </svg>
+  </div>
+  <div class="bg-icon grad-cap">
+    <svg viewBox="0 0 24 24">
+      <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+      <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
+    </svg>
+  </div>
+  <div class="bg-icon pencil">
+    <svg viewBox="0 0 24 24">
+      <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20 2 22l1.5-5.5Z"/>
+    </svg>
+  </div>
+  <div class="bg-icon book-stack">
+    <svg viewBox="0 0 24 24">
+      <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>
+    </svg>
+  </div>
+  <div class="bg-icon leaf">
+    <svg viewBox="0 0 24 24">
+      <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/>
+      <path d="M2 21c0-3 1.85-5.36 5.08-6"/>
+    </svg>
+  </div>
   <div class="bg-icon dots">●●●<br>●●●<br>●●●</div>
-  <div class="bg-icon dots2">●●<br>●●</div>
   <div class="bg-icon star">✨</div>
 
   <div class="container">
