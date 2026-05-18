@@ -18,19 +18,22 @@
       position:relative;
       overflow:hidden;
     }
-    /* 背景裝飾圖案 */
-    body::before, body::after,
+    /* 背景裝飾圖案 - 調整：縮細、分散、透明度更高 */
     .bg-icon {
       position:absolute;
-      color:rgba(255,255,255,0.15);
+      color:rgba(255,255,255,0.12); /* 透明度調高 */
       pointer-events:none;
+      font-size:40px; /* 全部縮細 */
     }
-    .bg-icon.book-open { top:15%; left:10%; font-size:80px; }
-    .bg-icon.grad-cap { top:12%; right:8%; font-size:90px; }
-    .bg-icon.pencil { bottom:25%; left:8%; font-size:100px; }
-    .bg-icon.book-stack { bottom:10%; right:10%; font-size:110px; }
-    .bg-icon.leaf { bottom:15%; right:5%; font-size:70px; }
-    .bg-icon.dots { bottom:15%; left:8%; font-size:40px; }
+    /* 重新分布位置，分散在四周 */
+    .bg-icon.book-open { top:10%; left:8%; }
+    .bg-icon.grad-cap { top:8%; right:10%; }
+    .bg-icon.pencil { bottom:30%; left:5%; }
+    .bg-icon.book-stack { bottom:8%; right:8%; }
+    .bg-icon.leaf { bottom:12%; right:5%; }
+    .bg-icon.dots { bottom:18%; left:10%; font-size:24px; }
+    .bg-icon.dots2 { top:25%; right:15%; font-size:24px; } /* 加多個點點分散 */
+    .bg-icon.star { top:20%; right:20%; font-size:30px; } /* 加埋星星，同圖一樣 */
 
     .container { width:100%; max-width:430px; z-index:1; }
     .login-card {
@@ -131,13 +134,15 @@
   </style>
 </head>
 <body>
-  <!-- 背景裝飾圖案 -->
+  <!-- 背景裝飾圖案 - 分散、縮細、加埋星星 -->
   <div class="bg-icon book-open">📖</div>
   <div class="bg-icon grad-cap">🎓</div>
   <div class="bg-icon pencil">✏️</div>
   <div class="bg-icon book-stack">📚</div>
   <div class="bg-icon leaf">🌿</div>
   <div class="bg-icon dots">●●●<br>●●●<br>●●●</div>
+  <div class="bg-icon dots2">●●<br>●●</div>
+  <div class="bg-icon star">✨</div>
 
   <div class="container">
     <div class="login-card">
