@@ -6,97 +6,81 @@
   <title>花子先生網校</title>
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
-
-    :root{
-      --bg-1:#D48A3F;
-      --bg-2:#E7B07A;
-      --card:#F7F3EE;
-      --card-border:rgba(94, 67, 45, 0.10);
-      --text:#4F3B2D;
-      --muted:#8B7768;
-      --title:#B85C38;
-      --input-bg:#FFFDFC;
-      --input-border:#E7D8CA;
-      --input-focus:#D48A3F;
-      --primary:#3E5368;
-      --primary-hover:#31475C;
-      --secondary:#90A1A6;
-      --secondary-hover:#7F9197;
-      --link:#2C7BC0;
-      --danger:#D9534F;
-      --danger-hover:#BF4541;
-      --white:#ffffff;
-      --shadow:0 18px 45px rgba(87, 55, 28, 0.16);
-      --radius-xl:28px;
-      --radius-lg:16px;
-      --radius-md:12px;
-    }
-
     body {
       font-family:"PingFang HK","Noto Sans TC","Microsoft JhengHei",sans-serif;
-      background: linear-gradient(135deg, var(--bg-1) 0%, var(--bg-2) 100%);
+      background: linear-gradient(135deg, #D48A3F 0%, #E7B07A 100%);
       min-height:100vh;
       padding:24px;
       display:flex;
-      flex-direction:column;
       justify-content:center;
       align-items:center;
-      color:var(--text);
+      color:#4F3B2D;
     }
-
-    .container {
-      width:100%;
-      max-width:430px;
-    }
-
+    .container { width:100%; max-width:430px; }
     h1 {
       text-align:center;
       margin-bottom:24px;
-      color:var(--title);
+      color:#B85C38;
       font-size:42px;
-      line-height:1.15;
       font-weight:700;
-      letter-spacing:1px;
-      text-shadow:0 2px 10px rgba(255,255,255,0.12);
     }
-
     .box {
-      background:rgba(247,243,238,0.96);
-      backdrop-filter: blur(4px);
-      width:100%;
+      background:#F7F3EE;
       padding:32px 28px 24px;
-      border-radius:var(--radius-xl);
-      box-shadow:var(--shadow);
-      border:1px solid var(--card-border);
+      border-radius:28px;
+      box-shadow:0 18px 45px rgba(87,55,28,0.16);
     }
-
-    #login, #dashboard {
-      display:flex;
-      flex-direction:column;
-      gap:14px;
-    }
-
-    input {
+    input, button {
       width:100%;
-      padding:16px 18px;
-      border:1px solid var(--input-border);
-      border-radius:var(--radius-lg);
       font-size:16px;
-      background:var(--input-bg);
-      color:var(--text);
-      outline:none;
-      transition:all 0.25s ease;
+      border-radius:16px;
     }
-
-    input::placeholder {
-      color:#A79A90;
+    input {
+      padding:16px 18px;
+      margin-bottom:14px;
+      border:1px solid #E7D8CA;
+      background:#FFFDFC;
     }
-
-    input:focus {
-      border-color:var(--input-focus);
-      box-shadow:0 0 0 4px rgba(212,138,63,0.14);
-      background:#fff;
-    }
-
     button {
-      w
+      padding:15px 18px;
+      border:none;
+      color:#fff;
+      font-weight:600;
+      background:#3E5368;
+      margin-bottom:12px;
+      cursor:pointer;
+    }
+    .forgot-link {
+      display:block;
+      text-align:center;
+      color:#2C7BC0;
+      margin:6px 0 12px;
+      text-decoration:none;
+    }
+    .btn-secondary { background:#90A1A6; }
+    .footer-text {
+      text-align:center;
+      margin-top:18px;
+      font-size:14px;
+      color:rgba(255,255,255,0.92);
+      line-height:1.75;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>線上教室</h1>
+    <div class="box">
+      <input type="email" placeholder="你的電郵">
+      <input type="password" placeholder="密碼（至少6位）">
+      <button>登入</button>
+      <a href="#" class="forgot-link">忘記密碼？</a>
+      <button class="btn-secondary">註冊新帳號</button>
+    </div>
+    <div class="footer-text">
+      只向本善教育 及 A元智研學生使用<br>
+      花子先生管理
+    </div>
+  </div>
+</body>
+</html>
