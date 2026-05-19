@@ -72,6 +72,25 @@
       left:50%;
       transform:translateX(-50%);
     }
+
+    /* 登入卡片內的 Google 登入提示小字樣式 */
+    .google-hint {
+      font-size: 14px;
+      color: #5c6b73;
+      margin-top: 24px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-weight: 500;
+    }
+    .google-hint span.g-logo {
+      font-weight: bold;
+      background: linear-gradient(to right, #4285F4 25%, #EA4335 25% 50%, #FBBC05 50% 75%, #34A853 75%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
     
     .input-group {
       margin:16px 0;
@@ -187,6 +206,11 @@
       
       <!-- 登入與註冊區域 -->
       <div id="login-form">
+        <!-- 卡片內新增的 Google 登入提示小字 -->
+        <div class="google-hint">
+          <span class="g-logo">G</span><span>請使用 Google 帳號電郵登入</span>
+        </div>
+
         <div class="input-group">
           <span class="icon">✉️</span>
           <input type="email" id="email" placeholder="你的電郵">
