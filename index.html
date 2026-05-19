@@ -44,20 +44,33 @@
       text-align:center;
     }
     
-    /* 粉紅色立體字：線上教室 3D 效果 */
     h1 {
-      color: #ff6b8b; 
-      font-size:42px;
+      color:#1A304E;
+      font-size:48px;
       font-weight:700;
       margin-bottom:24px;
       position:relative;
-      letter-spacing: 2px;
-      text-shadow: 
-        0 1px 0 #ff477e,
-        0 2px 0 #ff3366,
-        0 3px 0 #e61a5c,
-        0 4px 0 #cc0044,
-        0 5px 6px rgba(0,0,0,0.25);
+    }
+    h1::after {
+      content:"";
+      width:80px;
+      height:1px;
+      background:#D48A3F;
+      position:absolute;
+      bottom:-12px;
+      left:50%;
+      transform:translateX(-50%);
+    }
+    h1::before {
+      content:"";
+      width:6px;
+      height:6px;
+      background:#D48A3F;
+      border-radius:50%;
+      position:absolute;
+      bottom:-14px;
+      left:50%;
+      transform:translateX(-50%);
     }
     
     .input-group {
