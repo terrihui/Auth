@@ -18,7 +18,7 @@
       position:relative;
       overflow:hidden;
     }
-    
+
     /* 背景飄浮圖案 */
     .bg-icon {
       position:absolute;
@@ -43,7 +43,7 @@
       box-shadow:0 10px 30px rgba(0,0,0,0.1);
       text-align:center;
     }
-    
+
     h1 {
       color:#1A304E;
       font-size:48px;
@@ -73,8 +73,8 @@
       transform:translateX(-50%);
     }
 
-    /* 登入卡片內的 Google 登入提示小字樣式 */
-    .google-hint {
+    /* 登入卡片內的登入方式提示小字樣式 */
+    .login-hint {
       font-size: 14px;
       color: #5c6b73;
       margin-top: 24px;
@@ -85,13 +85,24 @@
       gap: 6px;
       font-weight: 500;
     }
-    .google-hint span.g-logo {
+    .login-hint span.icon-badge {
       font-weight: bold;
-      background: linear-gradient(to right, #4285F4 25%, #EA4335 25% 50%, #FBBC05 50% 75%, #34A853 75%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: #2A4B7C;
     }
-    
+
+    /* 視覺隱藏但螢幕閱讀器可讀的標籤 (accessibility fix) */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
+
     .input-group {
       margin:16px 0;
       position:relative;
@@ -105,6 +116,11 @@
       background:#fff;
       color:#4F3B2D;
     }
+    input:focus {
+      outline: none;
+      border-color: #2A4B7C;
+      box-shadow: 0 0 0 3px rgba(42,75,124,0.15);
+    }
     .input-group .icon {
       position:absolute;
       left:16px;
@@ -112,6 +128,7 @@
       transform:translateY(-50%);
       color:#999;
       font-size:18px;
+      pointer-events: none;
     }
     .input-group .eye-icon {
       right:16px;
@@ -119,7 +136,18 @@
       cursor:pointer;
       user-select:none;
       font-size:18px;
+      pointer-events: auto;
+      background: none;
+      border: none;
+      padding: 0;
     }
+    .field-hint {
+      text-align: left;
+      font-size: 12.5px;
+      color: #8a7a6a;
+      margin: -8px 0 4px 4px;
+    }
+    .field-hint.ok { color: #2e7d32; }
     .forgot-link {
       display:block;
       text-align:center;
@@ -127,6 +155,11 @@
       margin:12px 0 24px;
       text-decoration:underline;
       font-size:15px;
+      background:none;
+      border:none;
+      cursor:pointer;
+      width:100%;
+      padding:4px;
     }
     button {
       width:100%;
@@ -153,25 +186,29 @@
       color:white;
     }
     button:hover { opacity:0.9; }
-    
-    #notice { 
-      margin:15px 0 20px; 
-      padding:12px; 
-      background:#ffffff; 
+    button:disabled {
+      opacity:0.55;
+      cursor:not-allowed;
+    }
+
+    #notice {
+      margin:15px 0 20px;
+      padding:12px;
+      background:#ffffff;
       border-left: 5px solid #2A4B7C;
       border-radius:4px;
       font-size: 14px;
       color: #555;
       text-align: left;
     }
-    #classroom-btn { 
-      display:block; 
+    #classroom-btn {
+      display:block;
       margin:20px 0 12px;
-      padding:16px; 
-      background:#4285F4; 
-      color:white; 
-      text-align:center; 
-      text-decoration:none; 
+      padding:16px;
+      background:#4285F4;
+      color:white;
+      text-align:center;
+      text-decoration:none;
       border-radius:10px;
       font-weight: bold;
       font-size: 18px;
@@ -186,43 +223,63 @@
       line-height:1.75;
       text-shadow: 0 1px 2px rgba(0,0,0,0.2);
     }
+
+    /* 表單狀態訊息 (取代部分 alert，減少重複彈出視窗) */
+    .status-msg {
+      font-size: 14px;
+      text-align: left;
+      padding: 10px 12px;
+      border-radius: 8px;
+      margin: 4px 0 12px;
+      display: none;
+    }
+    .status-msg.show { display: block; }
+    .status-msg.error { background:#fdecea; color:#c62828; border-left:4px solid #c62828; }
+    .status-msg.success { background:#eaf6ec; color:#2e7d32; border-left:4px solid #2e7d32; }
+    .status-msg.info { background:#eef3fb; color:#2A4B7C; border-left:4px solid #2A4B7C; }
   </style>
 </head>
 <body>
   <!-- 背景裝飾圖案 -->
-  <div class="bg-icon book-open">📖</div>
-  <div class="bg-icon grad-cap">🎓</div>
-  <div class="bg-icon pencil">✏️</div>
-  <div class="bg-icon book-stack">📚</div>
-  <div class="bg-icon leaf">🌿</div>
-  <div class="bg-icon dots">●●●<br>●●●<br>●●●</div>
-  <div class="bg-icon dots2">●●<br>●●</div>
-  <div class="bg-icon star">✨</div>
+  <div class="bg-icon book-open" aria-hidden="true">📖</div>
+  <div class="bg-icon grad-cap" aria-hidden="true">🎓</div>
+  <div class="bg-icon pencil" aria-hidden="true">✏️</div>
+  <div class="bg-icon book-stack" aria-hidden="true">📚</div>
+  <div class="bg-icon leaf" aria-hidden="true">🌿</div>
+  <div class="bg-icon dots" aria-hidden="true">●●●<br>●●●<br>●●●</div>
+  <div class="bg-icon dots2" aria-hidden="true">●●<br>●●</div>
+  <div class="bg-icon star" aria-hidden="true">✨</div>
 
   <div class="container">
     <div class="login-card">
-      <!-- 粉紅立體標題 -->
+      <!-- 立體標題 -->
       <h1>線上教室</h1>
-      
+
       <!-- 登入與註冊區域 -->
       <div id="login-form">
-        <!-- 卡片內新增的 Google 登入提示小字 -->
-        <div class="google-hint">
-          <span class="g-logo">G</span><span>請使用 Google 帳號電郵登入</span>
+        <!-- 修正：原文字暗示 Google 帳號登入，但實際為電郵密碼登入，已修正文字使其準確 -->
+        <div class="login-hint">
+          <span class="icon-badge">✉️</span><span>請使用電郵及密碼登入</span>
         </div>
 
+        <div id="formStatus" class="status-msg" role="status" aria-live="polite"></div>
+
         <div class="input-group">
-          <span class="icon">✉️</span>
-          <input type="email" id="email" placeholder="你的電郵">
+          <label for="email" class="sr-only">你的電郵</label>
+          <span class="icon" aria-hidden="true">✉️</span>
+          <input type="email" id="email" placeholder="你的電郵" autocomplete="email">
         </div>
         <div class="input-group">
-          <span class="icon">🔒</span>
-          <input type="password" id="pwd" placeholder="密碼（至少6位）">
-          <span class="icon eye-icon" id="showPwd">👀</span>
+          <label for="pwd" class="sr-only">密碼（至少6位）</label>
+          <span class="icon" aria-hidden="true">🔒</span>
+          <input type="password" id="pwd" placeholder="密碼（至少6位）" autocomplete="current-password" aria-describedby="pwdHint">
+          <button type="button" class="icon eye-icon" id="showPwd" aria-label="顯示密碼" aria-pressed="false">👀</button>
         </div>
-        <a href="#" onclick="forgotPassword(); return false;" class="forgot-link">忘記密碼？</a>
-        <button class="btn-login" onclick="login()">登入</button>
-        <button class="btn-register" onclick="register()">註冊新帳號</button>
+        <p class="field-hint" id="pwdHint">密碼需至少 6 位</p>
+
+        <button type="button" class="forgot-link" onclick="forgotPassword()">忘記密碼？</button>
+        <button class="btn-login" id="loginBtn" onclick="login()">登入</button>
+        <button class="btn-register" id="registerBtn" onclick="register()">註冊新帳號</button>
       </div>
 
       <!-- 登入成功後的教室區域 -->
@@ -231,14 +288,14 @@
         <div id="notice">
           📢 提醒：請檢查網課時間，準時參加！
         </div>
-        <a id="classroom-btn" href="https://classroom.google.com/c/Nzk2NzkyNDEyNDkx?cjc=dwgpxthq" target="_blank">
+        <a id="classroom-btn" href="https://classroom.google.com/c/Nzk2NzkyNDEyNDkx?cjc=dwgpxthq" target="_blank" rel="noopener noreferrer">
           進入你的課堂
         </a>
-        <button class="btn-register" onclick="logout()">登出</button>
-        <button class="btn-danger" onclick="deleteAccount()">🗑️ 取消帳戶（永久刪除）</button>
+        <button class="btn-register" id="logoutBtn" onclick="logout()">登出</button>
+        <button class="btn-danger" id="deleteBtn" onclick="deleteAccount()">🗑️ 取消帳戶（永久刪除）</button>
       </div>
     </div>
-    
+
     <!-- 藍色框外 下面的專屬小字 -->
     <div class="footer-text">
       只向本善教育 及 A元智研學生使用<br>花子先生管理
@@ -248,14 +305,14 @@
   <!-- Firebase SDK 模組與核心邏輯 -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
-    import { 
-      getAuth, 
-      signInWithEmailAndPassword, 
-      createUserWithEmailAndPassword, 
-      signOut, 
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      createUserWithEmailAndPassword,
+      signOut,
       onAuthStateChanged,
       sendPasswordResetEmail,
-      deleteUser   
+      deleteUser
     } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
 
     const firebaseConfig = {
@@ -270,6 +327,37 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
+    // ---- 狀態訊息小工具 (取代部分 alert，減少重複彈出視窗中斷使用者) ----
+    const statusEl = document.getElementById('formStatus');
+    function showStatus(message, type) {
+      statusEl.textContent = message;
+      statusEl.className = 'status-msg show ' + type;
+    }
+    function clearStatus() {
+      statusEl.className = 'status-msg';
+      statusEl.textContent = '';
+    }
+
+    // ---- 按鈕忙碌狀態小工具 (修正：防止重複點擊送出多次請求) ----
+    function setBusy(buttons, busy, busyText) {
+      buttons.forEach((btn) => {
+        if (!btn) return;
+        if (busy) {
+          btn.dataset.originalText = btn.dataset.originalText || btn.textContent;
+          btn.disabled = true;
+          if (busyText) btn.textContent = busyText;
+        } else {
+          btn.disabled = false;
+          if (btn.dataset.originalText) btn.textContent = btn.dataset.originalText;
+        }
+      });
+    }
+
+    const loginBtn = document.getElementById('loginBtn');
+    const registerBtn = document.getElementById('registerBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const deleteBtn = document.getElementById('deleteBtn');
+
     // 監聽並自動切換登入前後介面
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -282,62 +370,112 @@
       }
     });
 
-    // 登入功能
+    // 即時密碼長度提示 (修正：原本只在按下註冊時才檢查，現在即時顯示)
+    const pwdInput = document.getElementById('pwd');
+    const pwdHint = document.getElementById('pwdHint');
+    pwdInput.addEventListener('input', () => {
+      if (pwdInput.value.length === 0) {
+        pwdHint.textContent = '密碼需至少 6 位';
+        pwdHint.className = 'field-hint';
+      } else if (pwdInput.value.length < 6) {
+        pwdHint.textContent = `再輸入 ${6 - pwdInput.value.length} 位 (目前 ${pwdInput.value.length} 位)`;
+        pwdHint.className = 'field-hint';
+      } else {
+        pwdHint.textContent = '✓ 密碼長度足夠';
+        pwdHint.className = 'field-hint ok';
+      }
+    });
+
+    // 登入功能 (修正：加入忙碌狀態防止重複送出)
     window.login = function() {
-      const email = document.getElementById('email').value;
+      clearStatus();
+      const email = document.getElementById('email').value.trim();
       const password = document.getElementById('pwd').value;
-      if (!email || !password) return alert('請填寫電郵和密碼！');
-      
+      if (!email || !password) return showStatus('請填寫電郵和密碼！', 'error');
+
+      setBusy([loginBtn, registerBtn], true, '登入中...');
       signInWithEmailAndPassword(auth, email, password)
-        .catch((error) => alert('登入失敗：' + error.message));
+        .catch((error) => showStatus('登入失敗：' + translateAuthError(error), 'error'))
+        .finally(() => setBusy([loginBtn, registerBtn], false));
     };
 
-    // 註冊功能
+    // 註冊功能 (修正：成功後清楚引導使用者，而非只彈出 alert 後沒有下一步)
     window.register = function() {
-      const email = document.getElementById('email').value;
+      clearStatus();
+      const email = document.getElementById('email').value.trim();
       const password = document.getElementById('pwd').value;
-      if (!email || password.length < 6) return alert('請填寫有效電郵，密碼至少6位！');
-      
+      if (!email || password.length < 6) return showStatus('請填寫有效電郵，密碼至少6位！', 'error');
+
+      setBusy([loginBtn, registerBtn], true, '註冊中...');
       createUserWithEmailAndPassword(auth, email, password)
-        .then(() => alert('註冊成功！'))
-        .catch((error) => alert('註冊失敗：' + error.message));
+        .then(() => {
+          // 註冊成功後 Firebase 會自動將使用者登入，
+          // onAuthStateChanged 會自動切換到教室畫面，這裡只需顯示提示。
+          showStatus('✅ 註冊成功！正在為你登入...', 'success');
+        })
+        .catch((error) => showStatus('註冊失敗：' + translateAuthError(error), 'error'))
+        .finally(() => setBusy([loginBtn, registerBtn], false));
     };
 
-    // 忘記密碼功能
+    // 忘記密碼功能 (修正：說明文字更準確，避免暗示一定能重設成功)
     window.forgotPassword = function() {
-      const email = document.getElementById('email').value;
-      if (!email) return alert('請先輸入你的電郵地址');
-      
+      clearStatus();
+      const email = document.getElementById('email').value.trim();
+      if (!email) return showStatus('請先輸入你的電郵地址', 'error');
+
+      setBusy([loginBtn, registerBtn], true, '處理中...');
       sendPasswordResetEmail(auth, email)
-        .then(() => alert('✅ 重設密碼電郵已發送！\n請檢查你的郵箱。'))
-        .catch((error) => alert('發送失敗：' + error.message));
+        .then(() => showStatus('✅ 如此電郵已註冊，重設密碼連結將發送到你的郵箱，請查看（包括垃圾郵件夾）。', 'info'))
+        .catch((error) => showStatus('發送失敗：' + translateAuthError(error), 'error'))
+        .finally(() => setBusy([loginBtn, registerBtn], false));
     };
 
     // 登出功能
     window.logout = function() {
-      signOut(auth);
+      setBusy([logoutBtn, deleteBtn], true, '登出中...');
+      signOut(auth).finally(() => setBusy([logoutBtn, deleteBtn], false));
     };
 
-    // 刪除帳戶功能 (修正為 SDK v10+ 的 deleteUser)
+    // 刪除帳戶功能
     window.deleteAccount = function() {
       if (!confirm('⚠️ 確定要永久刪除你的帳戶嗎？\n此動作無法還原！')) return;
-      
+
+      setBusy([logoutBtn, deleteBtn], true, '刪除中...');
       const user = auth.currentUser;
       if (user) {
         deleteUser(user)
           .then(() => alert('帳戶已成功永久刪除。'))
           .catch((error) => {
             if (error.code === 'auth/requires-recent-login') {
-              alert('為了安全，請重新登入後再進行刪除操作。');
+              alert('為了安全，請先登出並重新登入，再進行刪除操作。');
             } else {
-              alert('刪除失敗：' + error.message);
+              alert('刪除失敗：' + translateAuthError(error));
             }
-          });
+          })
+          .finally(() => setBusy([logoutBtn, deleteBtn], false));
+      } else {
+        setBusy([logoutBtn, deleteBtn], false);
       }
     };
+
+    // 將 Firebase 錯誤訊息轉換為較易懂的中文提示
+    function translateAuthError(error) {
+      const map = {
+        'auth/invalid-email': '電郵格式不正確',
+        'auth/user-disabled': '此帳戶已被停用',
+        'auth/user-not-found': '找不到此帳戶',
+        'auth/wrong-password': '密碼錯誤',
+        'auth/invalid-credential': '電郵或密碼不正確',
+        'auth/email-already-in-use': '此電郵已被註冊',
+        'auth/weak-password': '密碼強度不足，請至少使用6位',
+        'auth/too-many-requests': '嘗試次數過多，請稍後再試',
+        'auth/network-request-failed': '網絡連線失敗，請檢查網絡後再試'
+      };
+      return map[error.code] || error.message;
+    }
   </script>
 
-  <!-- 眼睛圖案切換密碼顯示狀態腳本 -->
+  <!-- 眼睛圖案切換密碼顯示狀態腳本 (修正：加入 aria-pressed 狀態同步) -->
   <script>
     let pwd = document.getElementById('pwd');
     let btn = document.getElementById('showPwd');
@@ -345,9 +483,13 @@
       if(pwd.type === 'password'){
         pwd.type = 'text';
         btn.innerText = '👌🏻';
+        btn.setAttribute('aria-label', '隱藏密碼');
+        btn.setAttribute('aria-pressed', 'true');
       }else{
         pwd.type = 'password';
         btn.innerText = '👀';
+        btn.setAttribute('aria-label', '顯示密碼');
+        btn.setAttribute('aria-pressed', 'false');
       }
     }
   </script>
