@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-HK">
 <head>
-   <meta charset="UTF-8">
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>花子先生網校 - 線上教室登入</title>
   <style>
@@ -19,7 +19,6 @@
       overflow:hidden;
     }
 
-    /* 背景飄浮圖案 */
     .bg-icon {
       position:absolute;
       pointer-events:none;
@@ -35,7 +34,7 @@
     .bg-icon.dots2 { top:25%; right:15%; font-size:22px; color:rgba(255,255,255,0.15); }
     .bg-icon.star { top:20%; right:20%; font-size:28px; }
 
-   .container { width:100%; max-width:430px; z-index:1; }
+    .container { width:100%; max-width:430px; z-index:1; }
     .login-card {
       background:#FFF9F0;
       padding:40px 32px 32px;
@@ -73,7 +72,6 @@
       transform:translateX(-50%);
     }
 
-    /* 登入卡片內的登入方式提示小字樣式 */
     .login-hint {
       font-size: 14px;
       color: #5c6b73;
@@ -90,7 +88,6 @@
       color: #2A4B7C;
     }
 
-    /* 視覺隱藏但螢幕閱讀器可讀的標籤 (accessibility fix) */
     .sr-only {
       position: absolute;
       width: 1px;
@@ -109,7 +106,7 @@
     }
     input {
       width:100%;
-      padding:16px 48px 16px 48px;
+      padding:16px 56px 16px 48px;
       border:1px solid #bbdefb;
       border-radius:10px;
       font-size:16px;
@@ -131,15 +128,25 @@
       pointer-events: none;
     }
     .input-group .eye-icon {
+      position:absolute;
       right:16px;
+      top:50%;
+      transform:translateY(-50%);
       left:auto;
       cursor:pointer;
       user-select:none;
       font-size:18px;
-      pointer-events: auto;
-      background: none;
-      border: none;
-      padding: 0;
+      line-height:1;
+      pointer-events:auto;
+      background:none;
+      border:none;
+      padding:0;
+      margin:0;
+      width:auto;
+      color:#999;
+      display:flex;
+      align-items:center;
+      justify-content:center;
     }
     .field-hint {
       text-align: left;
@@ -214,7 +221,6 @@
       font-size: 18px;
     }
 
-    /* 藍色框外 下面的小字 */
     .footer-text {
       text-align:center;
       margin-top:32px;
@@ -224,7 +230,6 @@
       text-shadow: 0 1px 2px rgba(0,0,0,0.2);
     }
 
-    /* 表單狀態訊息 (取代部分 alert，減少重複彈出視窗) */
     .status-msg {
       font-size: 14px;
       text-align: left;
@@ -240,7 +245,6 @@
   </style>
 </head>
 <body>
-  <!-- 背景裝飾圖案 -->
   <div class="bg-icon book-open" aria-hidden="true">📖</div>
   <div class="bg-icon grad-cap" aria-hidden="true">🎓</div>
   <div class="bg-icon pencil" aria-hidden="true">✏️</div>
@@ -252,12 +256,9 @@
 
   <div class="container">
     <div class="login-card">
-      <!-- 立體標題 -->
       <h1>線上教室</h1>
 
-      <!-- 登入與註冊區域 -->
       <div id="login-form">
-        <!-- 修正：原文字暗示 Google 帳號登入，但實際為電郵密碼登入，已修正文字使其準確 -->
         <div class="login-hint">
           <span class="icon-badge">✉️</span><span>請使用電郵及密碼登入</span>
         </div>
@@ -273,7 +274,7 @@
           <label for="pwd" class="sr-only">密碼（至少6位）</label>
           <span class="icon" aria-hidden="true">🔒</span>
           <input type="password" id="pwd" placeholder="密碼（至少6位）" autocomplete="current-password" aria-describedby="pwdHint">
-          <button type="button" class="icon eye-icon" id="showPwd" aria-label="顯示密碼" aria-pressed="false">👀</button>
+          <button type="button" class="eye-icon" id="showPwd" aria-label="顯示密碼" aria-pressed="false">👀</button>
         </div>
         <p class="field-hint" id="pwdHint">密碼需至少 6 位</p>
 
@@ -282,7 +283,6 @@
         <button class="btn-register" id="registerBtn" onclick="register()">註冊新帳號</button>
       </div>
 
-      <!-- 登入成功後的教室區域 -->
       <div id="dashboard" style="display:none;">
         <p style="text-align:center; margin-bottom:15px; color:#2a4b7c; font-weight:bold; font-size:18px;" id="welcome"></p>
         <div id="notice">
@@ -296,13 +296,11 @@
       </div>
     </div>
 
-    <!-- 藍色框外 下面的專屬小字 -->
     <div class="footer-text">
       只向本善教育 及 A元智研學生使用<br>花子先生管理
     </div>
   </div>
 
-  <!-- Firebase SDK 模組與核心邏輯 -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
     import {
@@ -327,7 +325,6 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // ---- 狀態訊息小工具 (取代部分 alert，減少重複彈出視窗中斷使用者) ----
     const statusEl = document.getElementById('formStatus');
     function showStatus(message, type) {
       statusEl.textContent = message;
@@ -338,7 +335,6 @@
       statusEl.textContent = '';
     }
 
-    // ---- 按鈕忙碌狀態小工具 (修正：防止重複點擊送出多次請求) ----
     function setBusy(buttons, busy, busyText) {
       buttons.forEach((btn) => {
         if (!btn) return;
@@ -358,7 +354,6 @@
     const logoutBtn = document.getElementById('logoutBtn');
     const deleteBtn = document.getElementById('deleteBtn');
 
-    // 監聽並自動切換登入前後介面
     onAuthStateChanged(auth, (user) => {
       if (user) {
         document.getElementById('login-form').style.display = 'none';
@@ -370,7 +365,6 @@
       }
     });
 
-    // 即時密碼長度提示 (修正：原本只在按下註冊時才檢查，現在即時顯示)
     const pwdInput = document.getElementById('pwd');
     const pwdHint = document.getElementById('pwdHint');
     pwdInput.addEventListener('input', () => {
@@ -386,7 +380,6 @@
       }
     });
 
-    // 登入功能 (修正：加入忙碌狀態防止重複送出)
     window.login = function() {
       clearStatus();
       const email = document.getElementById('email').value.trim();
@@ -399,7 +392,6 @@
         .finally(() => setBusy([loginBtn, registerBtn], false));
     };
 
-    // 註冊功能 (修正：成功後清楚引導使用者，而非只彈出 alert 後沒有下一步)
     window.register = function() {
       clearStatus();
       const email = document.getElementById('email').value.trim();
@@ -409,15 +401,12 @@
       setBusy([loginBtn, registerBtn], true, '註冊中...');
       createUserWithEmailAndPassword(auth, email, password)
         .then(() => {
-          // 註冊成功後 Firebase 會自動將使用者登入，
-          // onAuthStateChanged 會自動切換到教室畫面，這裡只需顯示提示。
           showStatus('✅ 註冊成功！正在為你登入...', 'success');
         })
         .catch((error) => showStatus('註冊失敗：' + translateAuthError(error), 'error'))
         .finally(() => setBusy([loginBtn, registerBtn], false));
     };
 
-    // 忘記密碼功能 (修正：說明文字更準確，避免暗示一定能重設成功)
     window.forgotPassword = function() {
       clearStatus();
       const email = document.getElementById('email').value.trim();
@@ -430,13 +419,11 @@
         .finally(() => setBusy([loginBtn, registerBtn], false));
     };
 
-    // 登出功能
     window.logout = function() {
       setBusy([logoutBtn, deleteBtn], true, '登出中...');
       signOut(auth).finally(() => setBusy([logoutBtn, deleteBtn], false));
     };
 
-    // 刪除帳戶功能
     window.deleteAccount = function() {
       if (!confirm('⚠️ 確定要永久刪除你的帳戶嗎？\n此動作無法還原！')) return;
 
@@ -458,7 +445,6 @@
       }
     };
 
-    // 將 Firebase 錯誤訊息轉換為較易懂的中文提示
     function translateAuthError(error) {
       const map = {
         'auth/invalid-email': '電郵格式不正確',
@@ -475,7 +461,6 @@
     }
   </script>
 
-  <!-- 眼睛圖案切換密碼顯示狀態腳本 -->
   <script>
     let pwd = document.getElementById('pwd');
     let btn = document.getElementById('showPwd');
@@ -483,9 +468,13 @@
       if(pwd.type === 'password'){
         pwd.type = 'text';
         btn.innerText = '👌🏻';
+        btn.setAttribute('aria-label', '隱藏密碼');
+        btn.setAttribute('aria-pressed', 'true');
       }else{
         pwd.type = 'password';
         btn.innerText = '👀';
+        btn.setAttribute('aria-label', '顯示密碼');
+        btn.setAttribute('aria-pressed', 'false');
       }
     }
   </script>
